@@ -58,7 +58,13 @@ async function askAI(question) {
   const text =
     response.data.candidates[0].content.parts[0].text;
 
-    return text.replace(/\*\*/g, "").trim();
+    return text
+    .replace(/\*/g, "")        
+    .replace(/\./g, "")        
+    .trim()
+    .split(" ")
+    .pop();                    
+
 
 }
 
