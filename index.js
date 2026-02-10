@@ -42,23 +42,26 @@ function lcm(a, b) {
 }
 
 async function askAI(question) {
-  const q = question.toLowerCase();
+  const url =
+    "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=" +
+    GEMINI_API_KEY;
 
-  if (q.includes("capital") && q.includes("maharashtra")) {
-    return "Mumbai";
-  }
-  if (q.includes("capital") && q.includes("india")) {
-    return "Delhi";
-  }
-  if (q.includes("largest planet")) {
-    return "Jupiter";
-  }
-  if (q.includes("prime minister of india")) {
-    return "Modi";
-  }
+  const response = await axios.post(url, {
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: question }]
+      }
+    ]
+  });
 
-  return "Answer";
+  const text =
+    response.data.candidates[0].content.parts[0].text;
+
+    return text.replace(/\*\*/g, "").trim();
+
 }
+
 
 app.get("/health", (req, res) => {
   res.json({
